@@ -1,0 +1,35 @@
+<!-- rule.xml -->
+<mycat:rule xmlns:mycat="http://io.mycat/">
+    <tableRule name="mod-long">
+        <rule>
+            <!-- <columns>id</columns> -->
+            <columns>order_id</columns>
+            <algorithm>mod-long</algorithm>
+        </rule>
+    </tableRule>
+
+    <function name="mod-long" class="io.mycat.route.function.PartitionByMod">
+        <!-- how many data nodes -->
+        <property name="count">2</property>
+    </function>
+</mycat:rule>
+
+<!-- schema.xml -->
+<mycat:schema xmlns:mycat="http://io.mycat/">
+    <schema name="TESTDB" checkSQLschema="false" sqlMaxLimit="100">
+        <table name="t_order" primaryKey="order_id" autoIncrement="true" dataNode="dn0,dn1" rule="mod-long"/>
+    </schema>
+
+    <dataNode name="dn0" dataHost="localhost1" database="mds0" />
+    <dataNode name="dn1" dataHost="localhost2" database="mds1" />
+
+    <dataHost name="localhost1" maxCon="1000" minCon="10" balance="0" writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100">
+        <heartbeat>select 1</heartbeat>
+        <writeHost host="hostM1" url="localhost:3306" user="root" password="root"/>
+    </dataHost>
+
+    <dataHost name="localhost2" maxCon="1000" minCon="10" balance="0" writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100">
+        <heartbeat>select 1</heartbeat>
+        <writeHost host="hostM2" url="localhost:3306" user="root" password="root"/>
+    </dataHost>
+</mycat:schema>

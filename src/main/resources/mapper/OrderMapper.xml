@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress SqlResolve, SqlNoDataSourceInspection -->
+<mapper namespace="org.zephyr.sharding.repository.OrderRepository">
+    <resultMap id="resultMap" type="org.zephyr.sharding.entity.Order">
+        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- useGeneratedKeys="true"  -->
+    <insert id="insert" parameterType="org.zephyr.sharding.entity.Order">
+        INSERT INTO t_order (user_id, status) VALUES (#{userId}, #{status})
+    </insert>
+
+    <select id="selectFirstPage" resultMap="resultMap">
+        SELECT * FROM t_order ORDER BY order_id LIMIT 0, 10
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="resultMap">
+        SELECT * FROM t_order WHERE order_id = ${orderId}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM t_order WHERE order_id = #{orderId}
+    </delete>
+
+    <update id="updateById" parameterType="java.lang.Long">
+        UPDATE t_order SET order_id = ${newId} WHERE order_id = #{orderId}
+    </update>
+</mapper>
