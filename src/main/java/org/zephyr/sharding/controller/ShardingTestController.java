@@ -25,14 +25,13 @@ public class ShardingTestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ShardingTestController.class);
 
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
     private static final int THREAD_NUM = 4 * 2 + 1;
     private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR =
             new ThreadPoolExecutor(THREAD_NUM, THREAD_NUM,
                     0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
-    @Autowired
     public ShardingTestController(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }

@@ -3,7 +3,6 @@ package org.zephyr.sharding.entity;
 /**
  * Created by zephyr on 2018/9/4.
  */
-@SuppressWarnings("unused")
 public class OrderItem {
 
     private long orderItemId;
